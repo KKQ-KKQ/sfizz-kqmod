@@ -163,7 +163,7 @@ public:
         std::size_t oldSize = alignedSize;
 
         std::size_t tempSize = newSize + 2 * AlignmentMask; // To ensure that we have leeway at the beginning and at the end
-        Type* newData = reinterpret_cast<Type*>(std::calloc(tempSize, sizeof(value_type)));
+        Type* newData = new(std::nothrow) Type[tempSize];
         if (newData == nullptr) {
             return false;
         }
@@ -186,7 +186,7 @@ public:
             _alignedEnd = normalEnd;
 
         std::memcpy(normalData, oldNormalData, std::min(newSize, oldSize) * sizeof(Type));
-        std::free(oldData);
+        delete[] oldData;
 
         return true;
     }
@@ -326,14 +326,10 @@ private:
         return reinterpret_cast<void *>(aligned);
     }
 
-    struct deleter {
-        void operator()(void *p) const noexcept { std::free(p); }
-    };
-
     size_type largerSize { 0 };
     size_type alignedSize { 0 };
     pointer normalData { nullptr };
-    std::unique_ptr<value_type[], deleter> paddedData;
+    std::unique_ptr<value_type[]> paddedData;
     pointer normalEnd { nullptr };
     pointer _alignedEnd { nullptr };
     LEAK_DETECTOR(Buffer);

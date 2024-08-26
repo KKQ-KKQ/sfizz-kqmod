@@ -899,8 +899,12 @@ void Voice::Impl::amplitudeEnvelope(absl::Span<float> modulationSpan) noexcept
 
     // Amplitude EG
     absl::Span<const float> ampegOut(mm.getModulation(masterAmplitudeTarget_), numSamples);
-    ASSERT(ampegOut.data());
-    copy(ampegOut, modulationSpan);
+    if (!ampegOut.data()) {
+        fill(modulationSpan, 0.0f);
+    }
+    else {
+        copy(ampegOut, modulationSpan);
+    }
 
     // Amplitude envelope
     applyGain1<float>(baseGain_, modulationSpan);
@@ -981,9 +985,9 @@ void Voice::Impl::panStageMono(AudioSpan<float> buffer) noexcept
     }
     pan(*modulationSpan, leftBuffer, rightBuffer);
 
-    // add +3dB (10^(3/20)) to compensate for the pan stage (-3dB per stage)
-    applyGain1(1.4125375446227544f, leftBuffer);
-    applyGain1(1.4125375446227544f, rightBuffer);
+    // add +3dB to compensate for the pan stage (-3dB per stage)
+    applyGain1(1.41421356f, leftBuffer);
+    applyGain1(1.41421356f, rightBuffer);
 }
 
 void Voice::Impl::panStageStereo(AudioSpan<float> buffer) noexcept
@@ -1024,9 +1028,9 @@ void Voice::Impl::panStageStereo(AudioSpan<float> buffer) noexcept
     }
     pan(*modulationSpan, leftBuffer, rightBuffer);
 
-    // add +6dB (10^(6/20)) to compensate for the 2 pan stages (-3dB per stage)
-    applyGain1(1.9952623149688797f, leftBuffer);
-    applyGain1(1.9952623149688797f, rightBuffer);
+    // add +6dB to compensate for the 2 pan stages (-3dB per stage)
+    applyGain1(2.0f, leftBuffer);
+    applyGain1(2.0f, rightBuffer);
 }
 
 void Voice::Impl::filterStageMono(AudioSpan<float> buffer) noexcept
@@ -1188,7 +1192,7 @@ void Voice::Impl::fillWithData(AudioSpan<float> buffer) noexcept
         unsigned i = 0;
         while (i < numSamples) {
             int wrappedIndex = (*indices)[i] - loop.size * blockRestarts;
-            if (wrappedIndex > loop.end) {
+            while (wrappedIndex > loop.end) {
                 wrappedIndex -= loop.size;
                 blockRestarts += 1;
                 loop_.restarts += 1;

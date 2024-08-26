@@ -1580,6 +1580,13 @@ bool sfz::Region::parseEGOpcodeV2(const Opcode& opcode)
             return false;
         break;
 
+    case hash("eg&_curve&"):
+        if (FlexEGPoint* point = getOrCreateEGPoint())
+            point->curveIndex = opcode.read(Default::curveCC);
+        else
+            return false;
+        break;
+
     // Modulation: Flex EG (targets)
     case hash("eg&_amplitude"):
         EG_target(ModKey::createNXYZ(ModId::Amplitude, id), Default::amplitudeMod);
@@ -1869,12 +1876,12 @@ sfz::Region::Connection& sfz::Region::getOrCreateConnection(const ModKey& source
     if (Connection* c = getConnection(source, target))
         return *c;
 
-    sfz::Region::Connection c;
+    connections.emplace_back();
+    sfz::Region::Connection& c = connections.back();
     c.source = source;
     c.target = target;
 
-    connections.push_back(c);
-    return connections.back();
+    return c;
 }
 
 sfz::Region::Connection* sfz::Region::getConnectionFromCC(int sourceCC, const ModKey& target)

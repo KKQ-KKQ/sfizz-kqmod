@@ -7,7 +7,7 @@
 #include "AudioReader.h"
 #include <benchmark/benchmark.h>
 #include <sndfile.hh>
-#include <ghc/fs_std.hpp>
+#include "../src/sfizz/utility/ghc.hpp"
 #include <vector>
 #include <memory>
 #include <system_error>

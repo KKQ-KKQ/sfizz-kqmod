@@ -9,7 +9,7 @@
 #include <sndfile.hh>
 #define DR_FLAC_IMPLEMENTATION
 #include "dr_flac.h"
-#include "ghc/fs_std.hpp"
+#include "../src/sfizz/utility/ghc.hpp"
 #include "absl/memory/memory.h"
 #include <memory>
 #ifndef NDEBUG

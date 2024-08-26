@@ -154,7 +154,7 @@ bool FlexEnvelope::isFinished() const noexcept
 void FlexEnvelope::process(absl::Span<float> out)
 {
     Impl& impl = *impl_;
-    if (impl.desc_->dynamic) {
+    if (impl.desc_ && impl.desc_->dynamic) {
         int processed = 0;
         int remaining = static_cast<int>(out.size());
         while(remaining > 0) {
@@ -270,7 +270,7 @@ bool FlexEnvelope::Impl::advanceToStage(unsigned stageNumber)
     currentTime_ = 0.0f;
     updateCurrentTimeAndLevel();
     stageSustained_ = int(stageNumber) == desc.sustain;
-    stageCurve_ = &point.curve();
+    stageCurve_ = &point.curve(resources_->getCurves());
 
     return true;
 };

@@ -7,7 +7,7 @@
 #include "sfizz.h"
 #include "sfizz.hpp"
 #include "catch2/catch.hpp"
-#include "ghc/fs_std.hpp"
+#include "sfizz/utility/ghc.hpp"
 
 TEST_CASE("[Bindings] Midnam C++")
 {

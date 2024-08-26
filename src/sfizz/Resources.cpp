@@ -19,6 +19,11 @@
 namespace sfz {
 
 struct Resources::Impl {
+#if defined(SFIZZ_FILEOPENPREEXEC)
+    Impl(FileOpenPreexec& preexec_in) : filePool {synthConfig, preexec_in} {}
+#else
+    Impl() : filePool(synthConfig) {}
+#endif
     SynthConfig synthConfig;
     BufferPool bufferPool;
     MidiState midiState;
@@ -32,8 +37,13 @@ struct Resources::Impl {
     Metronome metronome;
 };
 
+#if defined(SFIZZ_FILEOPENPREEXEC)
+Resources::Resources(FileOpenPreexec& preexec_in)
+: impl_(new Impl(preexec_in))
+#else
 Resources::Resources()
-    : impl_(new Impl)
+: impl_(new Impl)
+#endif
 {
 }
 
@@ -59,11 +69,10 @@ void Resources::setSamplesPerBlock(int samplesPerBlock)
     impl.beatClock.setSamplesPerBlock(samplesPerBlock);
 }
 
-void Resources::clearNonState()
+void Resources::clearNonStateButFilePool()
 {
     Impl& impl = *impl_;
     impl.curves = CurveSet::createPredefined();
-    impl.filePool.clear();
     impl.wavePool.clearFileWaves();
     impl.modMatrix.clear();
     impl.metronome.clear();

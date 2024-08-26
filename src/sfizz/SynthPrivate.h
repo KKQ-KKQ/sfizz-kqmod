@@ -15,6 +15,9 @@
 #include "modulations/sources/LFO.h"
 #include "parser/Parser.h"
 #include "parser/ParserListener.h"
+#if defined(SFIZZ_FILEOPENPREEXEC)
+#include "FileOpenPreexec.h"
+#endif
 
 namespace sfz {
 
@@ -364,8 +367,6 @@ struct Synth::Impl final: public Parser::Listener {
     CallbackBreakdown callbackBreakdown_;
     double dispatchDuration_ { 0 };
 
-    std::chrono::time_point<std::chrono::high_resolution_clock> lastGarbageCollection_;
-
     Parser parser_;
     std::string lastPath_;
     absl::optional<fs::file_time_type> modificationTime_ { };
@@ -388,6 +389,18 @@ struct Synth::Impl final: public Parser::Listener {
     }
 
     bool playheadMoved_ { false };
+
+#if defined(SFIZZ_FILEOPENPREEXEC)
+    FileOpenPreexec fileOpenPreexec_ {};
+#endif
+
+#if defined(SFIZZ_ADD_EXPRESSION_OPTION)
+    bool disableAddingExpr_ { false };
+#endif
+#if defined(SFIZZ_BLOCKLIST_OPCODES)
+    std::set<std::string> blocklistOpcodes_;
+    const std::set<std::string> *getOpcodesToBlock() { return &blocklistOpcodes_; }
+#endif
 };
 
 } // namespace sfz

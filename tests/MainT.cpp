@@ -3,7 +3,7 @@
 #define CATCH_CONFIG_RUNNER
 #include "catch2/catch.hpp"
 
-#include <ghc/fs_std.hpp>
+#include "sfizz/utility/ghc.hpp"
 
 static bool moveToTestsDirectory(const fs::path& searchedPath);
 

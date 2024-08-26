@@ -11,7 +11,7 @@
 #endif
 #define DR_WAV_IMPLEMENTATION
 #include "dr_wav.h"
-#include "ghc/fs_std.hpp"
+#include "../src/sfizz/utility/ghc.hpp"
 #include "absl/memory/memory.h"
 #if 0
 #include "libnyquist/Decoders.h"

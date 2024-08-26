@@ -96,7 +96,7 @@ const std::vector<std::string> playingSamples(const sfz::Synth& synth)
     for (const auto* voice: activeVoices) {
         if (!voice->released()) {
             if (auto region = voice->getRegion())
-                samples.push_back(region->sampleId->filename());
+                samples.push_back(fs::path(region->sampleId->filename()).filename());
         }
     }
     return samples;
@@ -132,7 +132,7 @@ const std::vector<std::string> activeSamples(const sfz::Synth& synth)
         if (!voice->isFree()) {
             const sfz::Region* region = voice->getRegion();
             if (region)
-                samples.push_back(region->sampleId->filename());
+                samples.push_back(fs::path(region->sampleId->filename()).filename());
         }
     }
     return samples;

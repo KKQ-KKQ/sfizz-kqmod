@@ -103,7 +103,7 @@ TEST_CASE("[Values] Sample and direction")
     synth.dispatchMessage(client, 0, "/region2/direction", "", nullptr);
     std::vector<std::string> expected {
         "/region0/sample,s : { *sine }",
-        "/region1/sample,s : { kick.wav }",
+        std::string("/region1/sample,s : { ") + std::string(fs::current_path() / "tests/TestFiles/kick.wav") + " }",
         "/region1/direction,s : { forward }",
         "/region2/direction,s : { reverse }",
     };

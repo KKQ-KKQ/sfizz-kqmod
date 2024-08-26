@@ -11,7 +11,7 @@
 #include "absl/memory/memory.h"
 #include <samplerate.h>
 #include <sndfile.hh>
-#include "ghc/fs_std.hpp"
+#include "../src/sfizz/utility/ghc.hpp"
 #include "hiir/Upsampler2xFpu.h"
 #include <unistd.h> // readlink
 

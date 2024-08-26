@@ -89,6 +89,7 @@ void sfz::MidiState::flushEvents() noexcept
 {
     auto flushEventVector = [] (EventVector& events) {
         ASSERT(!events.empty()); // CC event vectors should never be empty
+        if (events.size() == 1) return;
         events.front().value = events.back().value;
         events.front().delay = 0;
         events.resize(1);

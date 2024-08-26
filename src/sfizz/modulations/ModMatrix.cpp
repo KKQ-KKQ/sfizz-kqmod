@@ -14,6 +14,7 @@
 #include "utility/Debug.h"
 #include <absl/container/flat_hash_map.h>
 #include <absl/strings/string_view.h>
+#include <absl/strings/str_cat.h>
 #include <vector>
 #include <algorithm>
 
@@ -204,14 +205,21 @@ bool ModMatrix::connect(SourceId sourceId, TargetId targetId, float sourceDepth,
     if (sourceIndex >= impl.sources_.size() || targetIndex >= impl.targets_.size())
         return false;
 
+    TargetId sourceDepthModId;
+    // We need to register the target _before_ taking a reference to target.connectedSources
+    // because if the targets_ vector is reallocated, all targets' connected sources will be moved
+    // and conn will point to freed memory.
+    if (sourceDepthMod)
+        sourceDepthModId = registerTarget(sourceDepthMod);
+
     Impl::Target& target = impl.targets_[targetIndex];
     Impl::ConnectionData& conn = target.connectedSources[sourceIndex];
     conn.sourceDepth_ = sourceDepth;
     conn.sourceDepthMod_ = sourceDepthMod;
 
-    if (sourceDepthMod)
-        conn.sourceDepthModId_ = registerTarget(sourceDepthMod);
-
+    if (sourceDepthModId.valid())
+        conn.sourceDepthModId_ = sourceDepthModId;
+ 
     conn.velToDepth_ = velToDepth;
 
     return true;
@@ -513,10 +521,10 @@ std::string ModMatrix::toDotGraph() const
     for (const Impl::Target& target : impl.targets_) {
         for (const auto& cs : target.connectedSources) {
             const Impl::Source& source = impl.sources_[cs.first];
-            Edge e;
+            edges.emplace_back();
+            Edge& e = edges.back();
             e.source = source.key.toString();
             e.target = target.key.toString();
-            edges.push_back(std::move(e));
         }
     }
 

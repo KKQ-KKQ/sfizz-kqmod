@@ -5,7 +5,7 @@
 // If not, contact the sfizz maintainers at https://github.com/sfztools/sfizz
 
 #pragma once
-#include <ghc/fs_std.hpp>
+#include "sfizz/utility/ghc.hpp"
 #include <iosfwd>
 #include <memory>
 #include <cstddef>

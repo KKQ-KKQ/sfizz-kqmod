@@ -18,12 +18,12 @@ void FlexEGPoint::setShape(float shape)
     shapeCurve_ = FlexEGs::getShapeCurve(shape);
 }
 
-const Curve& FlexEGPoint::curve() const
+const Curve& FlexEGPoint::curve(const CurveSet& curveSet) const
 {
     if (shapeCurve_)
         return *shapeCurve_;
     else
-        return Curve::getDefault();
+        return curveSet.getCurve(curveIndex);
 }
 
 ///

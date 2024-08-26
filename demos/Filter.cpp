@@ -4,7 +4,7 @@
 #include "sfizz/utility/StringViewHelpers.h"
 #include <sndfile.hh>
 #include <cxxopts.hpp>
-#include <ghc/fs_std.hpp>
+#include "sfizz/utility/ghc.hpp"
 #include <string>
 #include <iostream>
 

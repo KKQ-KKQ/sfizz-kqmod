@@ -1819,6 +1819,22 @@ void sfz::Synth::dispatchMessage(Client& client, int delay, const char* path, co
             client.receive<'f'>(delay, path, point.ccLevel.getWithDefault(indices[3]));
         } break;
 
+        MATCH("/region&/eg&/point&/curve", "") {
+            GET_REGION_OR_BREAK(indices[0])
+            GET_EG_OR_BREAK(indices[1])
+            GET_EG_POINT_OR_BREAK(indices[2] + 1)
+
+            client.receive<'i'>(delay, path, point.curveIndex);
+        } break;
+
+        MATCH("/region&/eg&/point&/shape", "") {
+            GET_REGION_OR_BREAK(indices[0])
+            GET_EG_OR_BREAK(indices[1])
+            GET_EG_POINT_OR_BREAK(indices[2] + 1)
+
+            client.receive<'i'>(delay, path, point.shape());
+        } break;
+
         #undef GET_REGION_OR_BREAK
         #undef GET_FILTER_OR_BREAK
         #undef GET_EQ_OR_BREAK

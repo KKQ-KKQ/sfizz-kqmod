@@ -21,11 +21,18 @@ class StretchTuning;
 class ModMatrix;
 class BeatClock;
 class Metronome;
+#if defined(SFIZZ_FILEOPENPREEXEC)
+class FileOpenPreexec;
+#endif
 
 class Resources
 {
 public:
+#if defined(SFIZZ_FILEOPENPREEXEC)
+    Resources(FileOpenPreexec& preexec);
+#else
     Resources();
+#endif
     ~Resources();
 
     void setSampleRate(float samplerate);
@@ -34,7 +41,7 @@ public:
      * @brief Clear resources that are related to a currently loaded SFZ file
      *
      */
-    void clearNonState();
+    void clearNonStateButFilePool();
     /**
      * @brief Clear resources that are unrelated to the currently loaded SFZ file,
      *        i.e. midi state and beat clock.

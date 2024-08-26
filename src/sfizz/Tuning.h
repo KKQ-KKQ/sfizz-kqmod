@@ -5,8 +5,12 @@
 // If not, contact the sfizz maintainers at https://github.com/sfztools/sfizz
 
 #pragma once
-#include "ghc/fs_std.hpp"
+#include "utility/ghc.hpp"
 #include <memory>
+
+namespace Tunings {
+    struct Scale;
+}
 
 namespace sfz {
 
@@ -65,6 +69,18 @@ public:
      *
      */
     bool shouldReloadScala();
+
+    /**
+     * @brief Get the scale.
+     *
+     */
+    ::Tunings::Scale getScale();
+
+    /**
+     * @brief Set the Scale.
+     *
+     */
+    void setScale(const ::Tunings::Scale &scale);
 
 private:
     struct Impl;

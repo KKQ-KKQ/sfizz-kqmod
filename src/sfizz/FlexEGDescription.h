@@ -13,6 +13,7 @@
 namespace sfz {
 class Curve;
 class MidiState;
+class CurveSet;
 
 namespace FlexEGs {
     std::shared_ptr<Curve> getShapeCurve(float shape);
@@ -22,6 +23,7 @@ namespace FlexEGs {
 struct FlexEGPoint {
     float time { Default::flexEGPointTime }; // duration until next step (s)
     float level { Default::flexEGPointLevel }; // normalized amplitude
+    uint8_t curveIndex { Default::curveCC }; // curve index;
 
     CCMap<float> ccTime;
     CCMap<float> ccLevel;
@@ -31,7 +33,7 @@ struct FlexEGPoint {
 
     void setShape(float shape);
     float shape() const noexcept { return shape_; }
-    const Curve& curve() const;
+    const Curve& curve(const CurveSet& curveSet) const;
 
 private:
     float shape_ { Default::flexEGPointShape }; // 0: linear, positive: exp, negative: log

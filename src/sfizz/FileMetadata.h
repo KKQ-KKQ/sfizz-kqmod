@@ -8,7 +8,7 @@
 #if defined(SFIZZ_USE_SNDFILE)
 #include <sndfile.h>
 #endif
-#include "ghc/fs_std.hpp"
+#include "utility/ghc.hpp"
 #include <array>
 #include <memory>
 #include <cstdio>

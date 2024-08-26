@@ -8,7 +8,7 @@
 #include "Buffer.h"
 #include <benchmark/benchmark.h>
 #include <sndfile.hh>
-#include "ghc/fs_std.hpp"
+#include "../src/sfizz/utility/ghc.hpp"
 #define DR_WAV_IMPLEMENTATION
 #include "dr_wav.h"
 #include "AudioBuffer.h"

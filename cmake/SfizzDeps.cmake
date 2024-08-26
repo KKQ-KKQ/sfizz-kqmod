@@ -192,9 +192,9 @@ add_library(sfizz::spline ALIAS sfizz_spline)
 target_include_directories(sfizz_spline PUBLIC "src/external/spline")
 
 # The tunings library
-add_library(sfizz_tunings STATIC "src/external/tunings/src/Tunings.cpp")
+add_library(sfizz_tunings INTERFACE)
 add_library(sfizz::tunings ALIAS sfizz_tunings)
-target_include_directories(sfizz_tunings PUBLIC "src/external/tunings/include")
+target_include_directories(sfizz_tunings INTERFACE "src/external/tunings/include")
 
 # The hiir library
 add_library(sfizz_hiir INTERFACE)
@@ -276,8 +276,7 @@ else()
     else()
         set(SFIZZ_FILESYSTEM_INCLUDE_DIR "external/filesystem/include")
     endif()
-    file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/fs_std_impl.cpp" "#include <ghc/fs_std_impl.hpp>")
-    add_library(sfizz_filesystem_impl STATIC "${CMAKE_CURRENT_BINARY_DIR}/fs_std_impl.cpp")
+    add_library(sfizz_filesystem_impl STATIC "src/sfizz/utility/ghc.cpp" "src/sfizz/utility/ghc.hpp" )
     target_include_directories(sfizz_filesystem_impl PUBLIC ${SFIZZ_FILESYSTEM_INCLUDE_DIR})
     # Add the needed linker option for GCC 8
     if(CMAKE_CXX_COMPILER_ID MATCHES "GNU"
@@ -287,8 +286,11 @@ else()
     endif()
     #
     add_library(sfizz_filesystem INTERFACE)
-    target_compile_definitions(sfizz_filesystem INTERFACE "GHC_FILESYSTEM_FWD")
     target_link_libraries(sfizz_filesystem INTERFACE sfizz_filesystem_impl)
+    if(SFIZZ_USE_GHC_FS_FORCE)
+        target_compile_definitions(sfizz_filesystem INTERFACE "SFIZZ_USE_GHC_FS_FORCE")
+        target_compile_definitions(sfizz_filesystem_impl PUBLIC "SFIZZ_USE_GHC_FS_FORCE")
+    endif()
 endif()
 add_library(sfizz::filesystem ALIAS sfizz_filesystem)
 

@@ -27,13 +27,14 @@ namespace config {
     constexpr int stereoBufferPoolSize { 4 };
     constexpr int indexBufferPoolSize { 4 };
     constexpr int preloadSize { 8192 };
+    constexpr int maxPreloadDataClearBufferSize { 4 };
     constexpr bool loadInRam { false };
     constexpr int loggerQueueSize { 256 };
     constexpr int voiceLoggerQueueSize { 256 };
     constexpr bool loggingEnabled { false };
     constexpr size_t maxChannels { 32 };
     constexpr int numBackgroundThreads { 4 };
-    constexpr unsigned fileClearingPeriod { 5 }; // in seconds
+    constexpr unsigned fileClearingPeriod { 1 }; // in seconds
     constexpr int numVoices { 64 };
     constexpr unsigned maxVoices { 256 };
     constexpr unsigned smoothingSteps { 512 };
@@ -58,6 +59,7 @@ namespace config {
     constexpr uint16_t numCCs { @MIDI_CC_COUNT@ };
     constexpr int maxCurves { 256 };
     constexpr int fileChunkSize { 1024 };
+    constexpr int numChunkForLoadingAtOnce { 16 };
     constexpr int processChunkSize { 16 };
     constexpr unsigned int defaultAlignment { 16 };
     constexpr int filtersInPool { maxVoices * 2 };

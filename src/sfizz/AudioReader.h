@@ -6,11 +6,13 @@
 
 #pragma once
 #include "absl/types/span.h"
-#include "ghc/fs_std.hpp"
-#include <st_audiofile.h>
+#include "utility/ghc.hpp"
 #include <system_error>
 #include <memory>
 #include <cstdio>
+#if defined(SFIZZ_FILEOPENPREEXEC)
+#include "FileOpenPreexec.h"
+#endif
 
 namespace sfz {
 struct InstrumentInfo;
@@ -40,6 +42,8 @@ public:
     virtual unsigned channels() const = 0;
     virtual unsigned sampleRate() const = 0;
     virtual size_t readNextBlock(float* buffer, size_t frames) = 0;
+    virtual bool seekable() const = 0;
+    virtual bool seek(uint64_t position) = 0;
     virtual bool getInstrumentInfo(InstrumentInfo&) { return false; };
     virtual bool getWavetableInfo(WavetableInfo&) { return false; };
 };
@@ -49,6 +53,9 @@ typedef std::unique_ptr<AudioReader> AudioReaderPtr;
 /**
  * @brief Create a file reader of detected type.
  */
+#if defined(SFIZZ_FILEOPENPREEXEC)
+AudioReaderPtr createAudioReader(const fs::path& path, bool reverse, FileOpenPreexec& preexec, std::error_code* ec = nullptr);
+#endif
 AudioReaderPtr createAudioReader(const fs::path& path, bool reverse, std::error_code* ec = nullptr);
 
 /**
