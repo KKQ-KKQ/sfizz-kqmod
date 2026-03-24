@@ -644,6 +644,13 @@ void Voice::registerNoteOff(int delay, int noteNumber, float velocity) noexcept
         const bool sostenutoPedalReleaseCondition = !impl.region_->checkSostenuto
             || impl.sostenutoState_ != Impl::SostenutoState::Sustaining;
 
+        float minimumNoteDuration = impl.resources_.getSynthConfig().minimumNoteDuration;
+        auto& midiState = impl.resources_.getMidiState();
+        float noteDuration = midiState.getNoteDuration(noteNumber, delay);
+        if (noteDuration < minimumNoteDuration) {
+            delay += (minimumNoteDuration - noteDuration) * impl.sampleRate_;
+        }
+        
         if (sustainPedalReleaseCondition && sostenutoPedalReleaseCondition)
             release(delay);
     }

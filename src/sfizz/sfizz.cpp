@@ -165,6 +165,16 @@ void sfz::Sfizz::setVolume(float volume) noexcept
     synth->synth.setVolume(volume);
 }
 
+float sfz::Sfizz::getMinimumNoteDuration() const noexcept
+{
+    return synth->synth.getMinimumNoteDuration();
+}
+
+void sfz::Sfizz::setMinimumNoteDuration(float time) noexcept
+{
+    synth->synth.setMinimumNoteDuration(time);
+}
+
 void sfz::Sfizz::noteOn(int delay, int noteNumber, int velocity) noexcept
 {
     synth->synth.noteOn(delay, noteNumber, velocity);

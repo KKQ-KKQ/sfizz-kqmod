@@ -78,7 +78,7 @@ public:
     {
         simde__m128 x = simde_mm_sub_ps(simde_mm_setr_ps(-1, 0, 1, 2), simde_mm_set1_ps(coeff));
         simde__m128 h = hermite3x4(x);
-        simde__m128 y = simde_mm_mul_ps(h, simde_mm_loadu_ps(values - 1));
+        simde__m128 y = simde_mm_mul_ps(h, simde_mm_loadu_ps(values));
         return simde_vaddvq_f32(simde__m128_to_simde_float32x4(y));
     }
 };
@@ -96,7 +96,7 @@ public:
         R y = 0;
         for (int i = -1; i < 3; ++i) {
             R h = hermite3<R>(i - coeff);
-            y += h * values[i];
+            y += h * values[i+1];
         }
         return y;
     }
@@ -114,7 +114,7 @@ public:
     {
         simde__m128 x = simde_mm_sub_ps(simde_mm_setr_ps(-1, 0, 1, 2), simde_mm_set1_ps(coeff));
         simde__m128 h = bspline3x4(x);
-        simde__m128 y = simde_mm_mul_ps(h, simde_mm_loadu_ps(values - 1));
+        simde__m128 y = simde_mm_mul_ps(h, simde_mm_loadu_ps(values));
         return simde_vaddvq_f32(simde__m128_to_simde_float32x4(y));
     }
 };
@@ -132,7 +132,7 @@ public:
         R y = 0;
         for (int i = -1; i < 3; ++i) {
             R h = bspline3<R>(i - coeff);
-            y += h * values[i];
+            y += h * values[i+1];
         }
         return y;
     }
@@ -213,7 +213,7 @@ public:
         size_t i = 0;
         do {
             simde__m128 h = ws.getUncheckedX4(x);
-            y = simde_mm_add_ps(y, simde_mm_mul_ps(h, simde_mm_loadu_ps(&values[j0 + i])));
+            y = simde_mm_add_ps(y, simde_mm_mul_ps(h, simde_mm_loadu_ps(&values[i])));
             x = simde_mm_add_ps(x, simde_mm_set1_ps(4.0f));
             i += 4;
         } while (i < Points);
@@ -239,9 +239,9 @@ public:
         for (int i = 0; i < int(Points); ++i)
             h[i] = R(ws.getUnchecked(j0 - coeff + i));
 
-        R y = h[0] * values[j0];
+        R y = h[0] * values[0];
         for (int i = 1; i < int(Points); ++i)
-            y += h[i] * values[j0 + i];
+            y += h[i] * values[i];
 
         return y;
     }

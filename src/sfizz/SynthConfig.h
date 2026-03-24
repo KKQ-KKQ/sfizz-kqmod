@@ -30,5 +30,7 @@ struct SynthConfig
     }
 
     bool sustainCancelsRelease { Default::sustainCancelsRelease };
+    
+    float minimumNoteDuration { Default::minimumNoteDuration };
 };
 }

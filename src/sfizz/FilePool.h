@@ -386,7 +386,7 @@ private:
         std::shared_ptr<FileData> data { nullptr };
     };
 
-    using FileQueue = atomic_queue::AtomicQueue2<QueuedFileData, config::maxVoices>;
+    using FileQueue = atomic_queue::AtomicQueue2<QueuedFileData, config::maxVoices, true, true, false, false>;
     aligned_unique_ptr<FileQueue> filesToLoad;
 
     void dispatchingJob() noexcept;

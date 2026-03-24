@@ -1968,6 +1968,16 @@ void Synth::setVolume(float volume) noexcept
     impl.volume_ = Default::volume.bounds.clamp(volume);
 }
 
+float Synth::getMinimumNoteDuration() const noexcept
+{
+    return impl_->resources_.getSynthConfig().minimumNoteDuration;
+}
+
+void Synth::setMinimumNoteDuration(float time) noexcept
+{
+    impl_->resources_.getSynthConfig().minimumNoteDuration = time;
+}
+
 int Synth::getNumVoices() const noexcept
 {
     Impl& impl = *impl_;

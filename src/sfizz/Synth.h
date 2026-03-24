@@ -359,6 +359,15 @@ public:
     void setVolume(float volume) noexcept;
 
     /**
+     * @brief Get the minimum note duration.
+     */
+    float getMinimumNoteDuration() const noexcept;
+    /**
+     * @brief Set the minimum note duration.
+     * @param time the time in seconds.
+     */
+    void setMinimumNoteDuration(float time) noexcept;
+    /**
      * @brief Send a note on event to the synth
      *
      * @param delay the delay at which the event occurs; this should be lower

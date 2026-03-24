@@ -344,6 +344,7 @@ namespace Default
     // e.g. "additional" or multiple defautl values
     constexpr float globalVolume { -7.35f };
     constexpr float defaultEQFreq [numEQs] { 50.0f, 500.0f, 5000.0f };
+    constexpr float minimumNoteDuration { 0.05f };
 } // namespace Default
 
 } // namespace sfz
